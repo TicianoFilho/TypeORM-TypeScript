@@ -55,7 +55,7 @@ export class RoomController {
 
     try {
       
-      const room = await roomRepository.findOneBy({ id: Number(roomId) });
+      const room = await roomRepository.findOne({ where: { id: Number(roomId) }, relations: ['subjects'] });
       if (!room) {
         return res.status(404).json({ message: `Aula de código ${roomId} não existe.` });
       }
@@ -65,13 +65,11 @@ export class RoomController {
         return res.status(404).json({ message: `Matéria de código ${subject} não existe.` });
       }
       
-      // TODO I don't know how to bring all subjects when I bring only one room. like eagle mode. I need to make a push to add a new subject and not update thie one.
-
       // Update the room object adding the subject
       const roomWithSubjectAdded: Room = {
         ...room,
-        subjects: [subject],
       }
+      roomWithSubjectAdded.subjects.push(subject);
 
       // Implicitly creates new data on roomSubject table with given subjects field.
       await roomRepository.save(roomWithSubjectAdded);
