@@ -20,4 +20,13 @@ export class SubjectController {
       return res.status(500).json({ message: err.message });
     }
   }
+
+  public async list(req: Request, res: Response) {
+    try {
+      const subjects = await subjectRepository.find();
+      return res.status(200).json(subjects);
+    } catch (error: any) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
 }

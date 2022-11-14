@@ -79,7 +79,17 @@ export class RoomController {
     } catch (error: any) {
       return res.status(500).json({ error: 'Ocorreu um erro', message: error.message });
     }
+  }
 
+  public async findOne(req: Request, res: Response) {
+    const { roomId } = req.params;
+    try {
+      const room = await roomRepository.findOne({ where: { id: Number(roomId) }, relations: ['subjects'] });
+      return res.status(200).json(room);
+
+    } catch (error: any) {
+      return res.status(500).json({ error: 'Ocorreu um erro', message: error.message }); 
+    }
   }
 
   public async list(req: Request, res: Response) {
